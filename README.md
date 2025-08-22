@@ -1,4 +1,4 @@
-# Kraftbase - Security Vulnerability Kanban Board
+# Kraftbase - Frontend Assignemnt
 
 ## 🚀 Features
 
