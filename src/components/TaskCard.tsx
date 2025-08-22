@@ -239,13 +239,15 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ scale: 1.02 }}
-      className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all cursor-grab active:cursor-grabbing"
+      className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm hover:shadow-md transition-all cursor-grab active:cursor-grabbing"
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-start justify-between mb-2 sm:mb-3">
+        <div className="flex items-center space-x-1 sm:space-x-2">
           <span className="text-xs text-gray-500">#{task.id}</span>
-          <span className="text-xs text-gray-400">{formatDate(task.date)}</span>
+          <span className="text-xs text-gray-400 hidden sm:inline">
+            {formatDate(task.date)}
+          </span>
         </div>
         <div className="relative" ref={optionsRef}>
           <button
@@ -255,7 +257,7 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
             }}
             className="p-1 rounded hover:bg-gray-100 transition-colors"
           >
-            <MoreHorizontal className="h-4 w-4 text-gray-400" />
+            <MoreHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400" />
           </button>
 
           {/* Options Dropdown */}
@@ -265,7 +267,7 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
                 initial={{ opacity: 0, scale: 0.95, y: -10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg z-10 w-32"
+                className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg z-10 w-28 sm:w-32"
               >
                 <button
                   onClick={(e) => {
@@ -273,7 +275,7 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
                     setShowOptions(false);
                     onEdit(task);
                   }}
-                  className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
+                  className="w-full flex items-center space-x-2 px-3 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                 >
                   <Edit className="h-3 w-3" />
                   <span>Edit</span>
@@ -284,7 +286,7 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
                     setShowOptions(false);
                     onDelete(task.id);
                   }}
-                  className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
+                  className="w-full flex items-center space-x-2 px-3 py-2 text-xs sm:text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
                 >
                   <Trash2 className="h-3 w-3" />
                   <span>Delete</span>
@@ -296,27 +298,33 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
       </div>
 
       {/* Title */}
-      <h3 className="text-sm font-medium text-gray-900 mb-3 leading-tight">
+      <h3 className="text-sm font-medium text-gray-900 mb-2 sm:mb-3 leading-tight">
         {task.title}
       </h3>
 
+      {/* Date on mobile */}
+      <div className="sm:hidden mb-2">
+        <span className="text-xs text-gray-400">{formatDate(task.date)}</span>
+      </div>
+
       {/* Tags */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-3 space-y-2 sm:space-y-0">
+        <div className="flex items-center space-x-1 sm:space-x-2 flex-wrap gap-1">
           <span
-            className={`inline-flex items-center px-1 rounded-md text-xs font-medium ${getPriorityColor(
+            className={`inline-flex items-center px-1.5 sm:px-1 rounded-md text-xs font-medium ${getPriorityColor(
               task.priority
             )}`}
           >
             {task.priority}
           </span>
           <span
-            className={`inline-flex items-center space-x-1 px-1 rounded-md text-xs font-medium border ${getTypeColor(
+            className={`inline-flex items-center space-x-1 px-1.5 sm:px-1 rounded-md text-xs font-medium border ${getTypeColor(
               task.type
             )}`}
           >
             {getTypeIcon(task.type)}
-            <span>{task.type}</span>
+            <span className="hidden sm:inline">{task.type}</span>
+            <span className="sm:hidden">{task.type.substring(0, 3)}</span>
           </span>
           <span className="flex items-center space-x-1 justify-center">
             <CircularProgress score={task.score} type={task.type} />
@@ -327,8 +335,8 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               {/* Verification Badge */}
               <div className="relative" ref={tooltipRef}>
                 <button
@@ -338,8 +346,8 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
                   className="focus:outline-none hover:scale-110 transition-transform duration-200"
                 >
                   <BadgeCheck
-                    size={16}
-                    className={`${
+                    size={14}
+                    className={`sm:w-4 sm:h-4 ${
                       isVerified
                         ? "text-blue-500 fill-blue-100"
                         : "text-gray-400 hover:text-gray-600"

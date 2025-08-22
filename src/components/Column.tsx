@@ -121,18 +121,20 @@ export default function Column({
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="flex-shrink-0 w-80 bg-gray-50 rounded-lg p-4"
+      className="flex-shrink-0 w-72 sm:w-80 bg-gray-50 rounded-lg p-3 sm:p-4"
     >
       {/* Column Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <div
-            className={`w-3 h-3 rounded-full ${getColumnIndicator(
+            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${getColumnIndicator(
               column.color
             )}`}
           ></div>
-          <h2 className="font-semibold text-gray-900">{column.title}</h2>
-          <span className=" text-gray-700 ">
+          <h2 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
+            {column.title}
+          </h2>
+          <span className="text-xs sm:text-sm text-gray-700  ">
             {filteredAndSortedTasks.length}
           </span>
         </div>
@@ -141,17 +143,17 @@ export default function Column({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onAddTask(column.id)}
-            className="p-1 rounded hover:bg-gray-200 transition-colors"
+            className="p-1.5 sm:p-1 rounded hover:bg-gray-200 transition-colors"
           >
-            <Plus className="h-4 w-4 text-gray-600" />
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600" />
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onEditColumn(column)}
-            className="p-1 rounded hover:bg-gray-200 transition-colors"
+            className="p-1.5 sm:p-1 rounded hover:bg-gray-200 transition-colors"
           >
-            <MoreHorizontal className="h-4 w-4 text-gray-600" />
+            <MoreHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600" />
           </motion.button>
         </div>
       </div>
@@ -159,7 +161,7 @@ export default function Column({
       {/* Tasks Container */}
       <div
         ref={setNodeRef}
-        className="space-y-3 min-h-[200px] max-h-[calc(100vh-300px)] overflow-y-auto"
+        className="space-y-2 sm:space-y-3 min-h-[200px] max-h-[calc(100vh-280px)] sm:max-h-[calc(100vh-300px)] overflow-y-auto"
       >
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
           {filteredAndSortedTasks.map((task) => (
@@ -173,13 +175,13 @@ export default function Column({
         </SortableContext>
 
         {filteredAndSortedTasks.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            <p className="text-sm">No tasks found</p>
+          <div className="text-center py-6 sm:py-8 text-gray-500">
+            <p className="text-xs sm:text-sm">No tasks found</p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onAddTask(column.id)}
-              className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+              className="mt-2 text-xs sm:text-sm text-blue-600 hover:text-blue-800"
             >
               Add a task
             </motion.button>

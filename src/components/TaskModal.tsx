@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Target, Tag } from "lucide-react";
+import { X, Calendar, Target, Tag, AlertCircle } from "lucide-react";
 import { Task } from "@/store/slices/kanbanSlice";
 
 interface TaskModalProps {
@@ -32,6 +32,10 @@ export default function TaskModal({
   });
 
   const [newLabel, setNewLabel] = useState("");
+  const [errors, setErrors] = useState({
+    title: "",
+    score: "",
+  });
 
   useEffect(() => {
     if (task) {
@@ -57,13 +61,69 @@ export default function TaskModal({
         assignee: "",
       });
     }
+    // Clear errors when modal opens/closes
+    setErrors({ title: "", score: "" });
   }, [task, isOpen]);
+
+  const validateForm = () => {
+    const newErrors = { title: "", score: "" };
+
+    // Validate title
+    if (!formData.title.trim()) {
+      newErrors.title = "Task title is required";
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = "Title must be at least 3 characters long";
+    }
+
+    // Validate score
+    if (formData.score < 0) {
+      newErrors.score = "Score cannot be less than 0";
+    } else if (formData.score > 10) {
+      newErrors.score = "Score cannot be more than 10";
+    }
+
+    setErrors(newErrors);
+    return !newErrors.title && !newErrors.score;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.title.trim()) {
+    if (validateForm()) {
       onSave(formData);
       onClose();
+    }
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormData({ ...formData, title: value });
+
+    // Real-time validation for title
+    if (!value.trim()) {
+      setErrors({ ...errors, title: "Task title is required" });
+    } else if (value.trim().length < 3) {
+      setErrors({
+        ...errors,
+        title: "Title must be at least 3 characters long",
+      });
+    } else {
+      setErrors({ ...errors, title: "" });
+    }
+  };
+
+  const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0;
+    const clampedValue = Math.min(Math.max(value, 0), 10);
+
+    setFormData({ ...formData, score: clampedValue });
+
+    // Real-time validation for score
+    if (clampedValue < 0) {
+      setErrors({ ...errors, score: "Score cannot be less than 0" });
+    } else if (clampedValue > 10) {
+      setErrors({ ...errors, score: "Score cannot be more than 10" });
+    } else {
+      setErrors({ ...errors, score: "" });
     }
   };
 
@@ -130,13 +190,20 @@ export default function TaskModal({
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white"
+                  onChange={handleTitleChange}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors ${
+                    errors.title
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-gray-500"
+                  }`}
                   placeholder="Enter task title"
-                  required
                 />
+                {errors.title && (
+                  <div className="mt-1 flex items-center text-sm text-red-600">
+                    <AlertCircle className="h-4 w-4 mr-1" />
+                    {errors.title}
+                  </div>
+                )}
               </div>
 
               {/* Priority and Type */}
@@ -203,15 +270,23 @@ export default function TaskModal({
                     min="0"
                     max="10"
                     value={formData.score}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        score: parseFloat(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white"
-                    placeholder="0.0"
+                    onChange={handleScoreChange}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors ${
+                      errors.score
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:ring-gray-500"
+                    }`}
+                    placeholder="0.0 - 10.0"
                   />
+                  {errors.score && (
+                    <div className="mt-1 flex items-center text-sm text-red-600">
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                      {errors.score}
+                    </div>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">
+                    Score must be between 0 and 10
+                  </p>
                 </div>
 
                 <div>
@@ -240,10 +315,19 @@ export default function TaskModal({
                   Cancel
                 </button>
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{
+                    scale: errors.title || errors.score ? 1 : 1.02,
+                  }}
+                  whileTap={{ scale: errors.title || errors.score ? 1 : 0.98 }}
                   type="submit"
-                  className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                  disabled={
+                    !formData.title.trim() || !!errors.title || !!errors.score
+                  }
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    !formData.title.trim() || !!errors.title || !!errors.score
+                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                      : "bg-gray-900 text-white hover:bg-gray-800"
+                  }`}
                 >
                   {task ? "Update Task" : "Create Task"}
                 </motion.button>

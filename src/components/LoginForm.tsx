@@ -31,7 +31,35 @@ export default function LoginForm() {
 
   const copyToClipboard = async (text: string, type: "email" | "password") => {
     try {
-      await navigator.clipboard.writeText(text);
+      // Check if clipboard API is available
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback for mobile or non-secure contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        // For mobile devices
+        if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+          textArea.setSelectionRange(0, textArea.value.length);
+        }
+
+        const successful = document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        if (!successful) {
+          throw new Error("Copy command failed");
+        }
+      }
+
+      // Update the form field and show success state
       if (type === "email") {
         setCopiedEmail(true);
         setTimeout(() => setCopiedEmail(false), 2000);
@@ -43,6 +71,17 @@ export default function LoginForm() {
       }
     } catch (err) {
       console.error("Failed to copy: ", err);
+      // Fallback: just set the field value without clipboard
+      if (type === "email") {
+        setEmail(text);
+        // Show a brief success state even if clipboard failed
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 1500);
+      } else {
+        setPassword(text);
+        setCopiedPassword(true);
+        setTimeout(() => setCopiedPassword(false), 1500);
+      }
     }
   };
 

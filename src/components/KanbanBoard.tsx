@@ -203,7 +203,7 @@ export default function KanbanBoard() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex space-x-6 p-6 min-w-max h-full"
+              className="flex md:space-x-6 space-x-3 p-3 md:p-6 min-w-max h-full"
             >
               {columns.map((column: ColumnType) => (
                 <Column
@@ -264,21 +264,23 @@ export default function KanbanBoard() {
               initial={{ scale: 0.8, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 20 }}
-              className="bg-white rounded-xl p-8 w-full max-w-md mx-auto shadow-2xl border border-gray-100"
+              className="bg-white rounded-xl p-6 sm:p-8 w-full max-w-md mx-auto shadow-2xl border border-gray-100"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Delete Task</h3>
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                  Delete Task
+                </h3>
                 <button
                   onClick={cancelDeleteTask}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <X className="h-5 w-5 text-gray-500" />
+                  <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
                 </button>
               </div>
 
-              <div className="mb-8">
-                <p className="text-gray-700 text-base leading-relaxed">
+              <div className="mb-6 sm:mb-8">
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
                   Are you sure you want to delete "
                   <strong className="text-gray-900">
                     {taskToDelete.title}
@@ -293,7 +295,7 @@ export default function KanbanBoard() {
               <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={cancelDeleteTask}
-                  className="px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  className="px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium order-2 sm:order-1"
                 >
                   Cancel
                 </button>
@@ -301,7 +303,7 @@ export default function KanbanBoard() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={confirmDeleteTask}
-                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-lg"
+                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-lg order-1 sm:order-2"
                 >
                   Delete Task
                 </motion.button>
