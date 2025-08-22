@@ -22,7 +22,7 @@ export default function ColumnModal({
 }: ColumnModalProps) {
   const [formData, setFormData] = useState({
     title: "",
-    color: "gray" as const,
+    color: "gray" as string,
   });
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -31,7 +31,7 @@ export default function ColumnModal({
     if (column) {
       setFormData({
         title: column.title,
-        color: column.color as any,
+        color: column.color,
       });
     } else {
       setFormData({
@@ -126,7 +126,7 @@ export default function ColumnModal({
                         onClick={() =>
                           setFormData({
                             ...formData,
-                            color: color.value as any,
+                            color: color.value,
                           })
                         }
                         className={`p-3 rounded-lg border-2 transition-colors ${
@@ -187,9 +187,9 @@ export default function ColumnModal({
                     Delete Column
                   </h3>
                   <p className="text-gray-600">
-                    Are you sure you want to delete "{column?.title}"? This
-                    action cannot be undone and will delete all tasks in this
-                    column.
+                    Are you sure you want to delete &quot;{column?.title}&quot;?
+                    This action cannot be undone and will delete all tasks in
+                    this column.
                   </p>
                 </div>
                 <div className="flex justify-center space-x-3">

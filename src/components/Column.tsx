@@ -18,7 +18,6 @@ interface ColumnProps {
   onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
   onEditColumn: (column: ColumnType) => void;
-  onDeleteColumn: (columnId: string) => void;
 }
 
 export default function Column({
@@ -27,7 +26,6 @@ export default function Column({
   onEditTask,
   onDeleteTask,
   onEditColumn,
-  onDeleteColumn,
 }: ColumnProps) {
   const { setNodeRef } = useDroppable({
     id: column.id,
@@ -80,23 +78,6 @@ export default function Column({
       }
     });
   }, [column.tasks, searchTerm, filterLabel, sortBy]);
-
-  const getColumnColor = (color: string) => {
-    switch (color) {
-      case "gray":
-        return "border-gray-300";
-      case "orange":
-        return "border-orange-300";
-      case "blue":
-        return "border-blue-300";
-      case "green":
-        return "border-green-300";
-      case "purple":
-        return "border-purple-300";
-      default:
-        return "border-gray-300";
-    }
-  };
 
   const getColumnIndicator = (color: string) => {
     switch (color) {

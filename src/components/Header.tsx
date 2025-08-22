@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, SortAsc, Plus, LogOut, User } from "lucide-react";
+import { Search, Filter, Plus, LogOut, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import {
@@ -20,7 +20,7 @@ export default function Header({ onAddTask, onAddColumn }: HeaderProps) {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { searchTerm, filterLabel, sortBy } = useAppSelector(
-    (state: any) => state.kanban
+    (state) => state.kanban
   );
   const [showFilters, setShowFilters] = useState(false);
 

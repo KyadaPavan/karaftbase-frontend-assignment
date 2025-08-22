@@ -10,7 +10,6 @@ import {
   useSensors,
   closestCorners,
 } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -58,9 +57,9 @@ export default function KanbanBoard() {
     })
   );
 
-  const handleDragStart = (event: any) => {
+  const handleDragStart = (event: DragEndEvent) => {
     const { active } = event;
-    const task = findTaskById(active.id);
+    const task = findTaskById(active.id.toString());
     setActiveTask(task || null);
   };
 
@@ -213,7 +212,6 @@ export default function KanbanBoard() {
                   onEditTask={handleEditTask}
                   onDeleteTask={handleDeleteTask}
                   onEditColumn={handleEditColumn}
-                  onDeleteColumn={handleDeleteColumn}
                 />
               ))}
             </motion.div>
@@ -281,11 +279,11 @@ export default function KanbanBoard() {
 
               <div className="mb-6 sm:mb-8">
                 <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  Are you sure you want to delete "
+                  Are you sure you want to delete &quot;
                   <strong className="text-gray-900">
                     {taskToDelete.title}
                   </strong>
-                  "?
+                  &quot;?
                 </p>
                 <p className="text-red-600 text-sm mt-2 font-medium">
                   This action cannot be undone.

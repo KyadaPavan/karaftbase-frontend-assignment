@@ -6,7 +6,6 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
   MoreHorizontal,
-  Calendar,
   Target,
   Bug,
   Sparkles,

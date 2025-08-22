@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Target, Tag, AlertCircle } from "lucide-react";
+import { X, Calendar, Target, AlertCircle } from "lucide-react";
 import { Task } from "@/store/slices/kanbanSlice";
 
 interface TaskModalProps {
@@ -18,7 +18,6 @@ export default function TaskModal({
   onClose,
   onSave,
   task,
-  columnId,
 }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: "",
@@ -127,22 +126,22 @@ export default function TaskModal({
     }
   };
 
-  const addLabel = () => {
-    if (newLabel.trim() && !formData.labels.includes(newLabel.trim())) {
-      setFormData({
-        ...formData,
-        labels: [...formData.labels, newLabel.trim()],
-      });
-      setNewLabel("");
-    }
-  };
+  // const addLabel = () => {
+  //   if (newLabel.trim() && !formData.labels.includes(newLabel.trim())) {
+  //     setFormData({
+  //       ...formData,
+  //       labels: [...formData.labels, newLabel.trim()],
+  //     });
+  //     setNewLabel("");
+  //   }
+  // };
 
-  const removeLabel = (labelToRemove: string) => {
-    setFormData({
-      ...formData,
-      labels: formData.labels.filter((label) => label !== labelToRemove),
-    });
-  };
+  // const removeLabel = (labelToRemove: string) => {
+  //   setFormData({
+  //     ...formData,
+  //     labels: formData.labels.filter((label) => label !== labelToRemove),
+  //   });
+  // };
 
   const priorities: Task["priority"][] = ["Low", "Medium", "High", "Critical"];
   const types: Task["type"][] = [
